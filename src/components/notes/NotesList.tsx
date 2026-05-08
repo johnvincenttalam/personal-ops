@@ -141,22 +141,22 @@ export default function NotesList() {
         )}
       </button>
 
-      {/* Date + hover actions */}
+      {/* Date + actions — always visible on mobile, hover-reveal on desktop */}
       <div className="flex items-center justify-between px-5 pb-3.5 pt-1">
         <span className="text-[11px] text-gray-400 dark:text-zinc-500">
           {relativeLabel(note.updated_at)}
         </span>
-        <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="flex items-center gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
           <button
             onClick={(e) => { e.stopPropagation(); togglePin(note.id) }}
-            className="rounded p-1 text-gray-400 hover:bg-gray-200 hover:text-brand-500 dark:hover:bg-zinc-700"
+            className="rounded p-1.5 text-gray-400 hover:bg-gray-200 hover:text-brand-500 dark:hover:bg-zinc-700"
             title={note.is_pinned ? 'Unpin' : 'Pin'}
           >
             <Star className={clsx('h-3.5 w-3.5', note.is_pinned && 'fill-brand-500 text-brand-500')} />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); duplicateNote(note.id) }}
-            className="rounded p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-zinc-700"
+            className="rounded p-1.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-zinc-700"
             title="Duplicate"
           >
             <Copy className="h-3.5 w-3.5" />
@@ -165,7 +165,7 @@ export default function NotesList() {
             <button
               onClick={(e) => { e.stopPropagation(); setMovingId(movingId === note.id ? null : note.id) }}
               className={clsx(
-                'rounded p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-zinc-700',
+                'rounded p-1.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-zinc-700',
                 movingId === note.id && 'bg-gray-200 text-gray-600 dark:bg-zinc-700'
               )}
               title="Move to project"
@@ -175,7 +175,7 @@ export default function NotesList() {
           )}
           <button
             onClick={(e) => handleDelete(e, note.id, note.title)}
-            className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
+            className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
             title="Delete"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -277,7 +277,7 @@ export default function NotesList() {
       <button
         onClick={handleNew}
         disabled={!activeProjectId}
-        className="flex items-center justify-center gap-2 border-t border-gray-200 px-5 py-3 text-sm font-medium text-brand-600 transition hover:bg-gray-50 disabled:opacity-40 dark:border-zinc-800 dark:text-brand-400 dark:hover:bg-zinc-800/50"
+        className="flex min-h-[48px] items-center justify-center gap-2 border-t border-gray-200 px-5 py-3 text-sm font-medium text-brand-600 transition hover:bg-gray-50 disabled:opacity-40 dark:border-zinc-800 dark:text-brand-400 dark:hover:bg-zinc-800/50"
       >
         <Plus className="h-4 w-4" /> New Note
       </button>

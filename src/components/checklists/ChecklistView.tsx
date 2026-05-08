@@ -87,17 +87,17 @@ export default function ChecklistView() {
   return (
     <>
       <header className="border-b border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="w-full px-6 pb-4 pt-6">
-          <div className="flex items-start justify-between gap-4">
+        <div className="w-full px-4 pb-4 pt-5 md:px-6 md:pt-6">
+          <div className="flex items-start justify-between gap-3">
             <input
               value={list.content}
               onChange={(e) => updateItem(list.id, { content: e.target.value })}
               placeholder="Untitled list"
-              className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700"
+              className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
             />
             <button
               onClick={handleDeleteList}
-              className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
               aria-label="Delete checklist"
             >
               <Trash2 className="h-4 w-4" />
@@ -107,9 +107,9 @@ export default function ChecklistView() {
             <span>
               {completed} / {total} completed
             </span>
-            <div className="h-1.5 w-32 overflow-hidden rounded-full bg-gray-100 dark:bg-zinc-800">
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-zinc-800 md:max-w-[8rem]">
               <div
-                className="h-full bg-brand-500 transition-all"
+                className="h-full bg-brand-500 transition-all duration-300"
                 style={{ width: `${total ? (completed / total) * 100 : 0}%` }}
               />
             </div>
@@ -119,16 +119,16 @@ export default function ChecklistView() {
 
       <div className="flex-1 overflow-y-auto">
         <div className=" px-6 py-4">
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {items.map((item) => (
               <li
                 key={item.id}
-                className="group flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                className="group flex min-h-[44px] items-center gap-3 rounded-lg px-2 py-2 hover:bg-gray-50 dark:hover:bg-zinc-900"
               >
                 <button
                   onClick={() => toggleComplete(item.id)}
                   className={clsx(
-                    'flex h-5 w-5 shrink-0 items-center justify-center rounded border transition',
+                    'flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition md:h-5 md:w-5',
                     item.is_completed
                       ? 'border-brand-500 bg-brand-500 text-white'
                       : 'border-gray-300 hover:border-brand-400 dark:border-zinc-600'
@@ -145,9 +145,10 @@ export default function ChecklistView() {
                       'text-gray-400 line-through dark:text-zinc-500'
                   )}
                 />
+                {/* Always visible on mobile, hover-reveal on desktop */}
                 <button
                   onClick={() => deleteItem(item.id)}
-                  className="opacity-0 transition group-hover:opacity-100"
+                  className="p-1 sm:opacity-0 sm:transition sm:group-hover:opacity-100"
                 >
                   <Trash2 className="h-3.5 w-3.5 text-gray-400 hover:text-red-500" />
                 </button>
@@ -155,8 +156,8 @@ export default function ChecklistView() {
             ))}
           </ul>
 
-          <div className="mt-3 flex items-center gap-3 px-2 py-1.5">
-            <Plus className="h-4 w-4 text-gray-400" />
+          <div className="mt-2 flex min-h-[44px] items-center gap-3 rounded-lg px-2 py-2 focus-within:bg-gray-50 dark:focus-within:bg-zinc-900/50">
+            <Plus className="h-4 w-4 shrink-0 text-gray-400" />
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}

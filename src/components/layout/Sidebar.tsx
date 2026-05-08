@@ -118,7 +118,7 @@ export default function Sidebar() {
     return (
       <aside className="flex w-full flex-col items-center border-r border-gray-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
         {/* Logo */}
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-white">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-white">
           <Shield className="h-4 w-4" />
         </div>
 
@@ -126,7 +126,7 @@ export default function Sidebar() {
         <button
           onClick={handleNew}
           title={newLabel}
-          className="mt-3 flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-white transition hover:bg-brand-600 active:scale-[0.98]"
+          className="mt-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white transition hover:bg-brand-600 active:scale-[0.98]"
         >
           <Plus className="h-4 w-4" />
         </button>
@@ -135,7 +135,7 @@ export default function Sidebar() {
         <button
           onClick={() => setSearchOpen(true)}
           title="Search (⌘K)"
-          className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          className="mt-1 flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
         >
           <Search className="h-4 w-4" />
         </button>
@@ -150,7 +150,7 @@ export default function Sidebar() {
                 onClick={() => handlePickProject(p.id)}
                 title={p.name}
                 className={clsx(
-                  'mb-1 flex h-8 w-8 items-center justify-center rounded-lg transition',
+                  'mb-1 flex h-9 w-9 items-center justify-center rounded-lg transition',
                   activeProjectId === p.id
                     ? 'bg-brand-50 dark:bg-brand-500/10'
                     : 'hover:bg-gray-100 dark:hover:bg-zinc-800'
@@ -172,7 +172,7 @@ export default function Sidebar() {
               onClick={() => handlePickTab(t.id)}
               title={t.label}
               className={clsx(
-                'mb-1 flex h-8 w-8 items-center justify-center rounded-lg transition',
+                'mb-1 flex h-9 w-9 items-center justify-center rounded-lg transition',
                 activeTab === t.id
                   ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-300'
                   : 'text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800'
@@ -187,15 +187,15 @@ export default function Sidebar() {
         <div className="mt-auto flex flex-col items-center gap-1">
           <button
             onClick={() => setShowSettings(true)}
-          title="Settings"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            title="Settings"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
           >
             <Settings className="h-4 w-4" />
           </button>
           <button
             onClick={toggleSidebar}
             title="Expand sidebar"
-            className="hidden h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300 md:flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300 md:flex"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -270,7 +270,7 @@ export default function Sidebar() {
               {/* Project row */}
               <div
                 className={clsx(
-                  'group flex items-center border-l-2 py-1.5 pl-3 pr-3 transition-colors',
+                  'group flex min-h-[40px] items-center border-l-2 py-1 pl-3 pr-2 transition-colors',
                   isActive
                     ? 'border-l-brand-500 bg-brand-50/60 font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-200'
                     : 'border-l-transparent text-gray-600 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800/50'
@@ -278,7 +278,7 @@ export default function Sidebar() {
               >
                 <button
                   onClick={() => handlePickProject(p.id)}
-                  className="flex flex-1 items-center gap-1.5 truncate text-left text-sm"
+                  className="flex flex-1 items-center gap-1.5 truncate py-1 text-left text-sm"
                 >
                   {isActive ? (
                     <ChevronDown className="h-3 w-3 shrink-0 text-gray-400 dark:text-zinc-500" />
@@ -288,17 +288,17 @@ export default function Sidebar() {
                   <span className={clsx('h-2 w-2 shrink-0 rounded-full', colorDot[p.color])} />
                   <span className="truncate text-sm">{p.name}</span>
                 </button>
-                <div className="flex items-center gap-0.5 opacity-100 md:opacity-0 md:group-hover:opacity-100">
+                <div className="flex items-center gap-0.5 md:opacity-0 md:group-hover:opacity-100">
                   <button
                     onClick={(e) => { e.stopPropagation(); setEditingProject(p) }}
-                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-700"
+                    className="flex h-7 w-7 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-700"
                     aria-label={`Edit ${p.name}`}
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={(e) => handleDeleteProject(e, p)}
-                    className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
+                    className="flex h-7 w-7 items-center justify-center rounded text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
                     aria-label={`Delete ${p.name}`}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -317,7 +317,7 @@ export default function Sidebar() {
                         key={t.id}
                         onClick={() => handlePickTab(t.id)}
                         className={clsx(
-                          'flex w-full items-center gap-2 border-l-2 py-1.5 pl-9 pr-3 text-[13px] transition-colors',
+                          'flex min-h-[36px] w-full items-center gap-2 border-l-2 py-1.5 pl-9 pr-3 text-[13px] transition-colors',
                           tabActive
                             ? 'border-l-brand-500 bg-brand-50/40 font-medium text-brand-700 dark:bg-brand-500/5 dark:text-brand-200'
                             : 'border-l-transparent text-gray-500 hover:bg-gray-50 dark:text-zinc-500 dark:hover:bg-zinc-800/50'

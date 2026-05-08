@@ -25,18 +25,45 @@ body,
 
 body {
   @apply bg-white text-gray-900 dark:bg-zinc-950 dark:text-zinc-100;
+  /* Prevent elastic bounce on iOS at the root level */
+  overscroll-behavior: none;
 }
 
-/* Slim scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* iOS momentum scrolling for all scrollable containers */
+.overflow-y-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
 }
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-200 dark:bg-zinc-800 rounded-full;
+
+/* Safe area padding utilities */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-300 dark:bg-zinc-700;
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Slim scrollbars — desktop only */
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 dark:bg-zinc-800 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300 dark:bg-zinc-700;
+  }
+}
+
+/* Minimum touch target size (44×44 per Apple/WCAG) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* cmdk Command Palette styles */
@@ -49,9 +76,10 @@ body {
   background: transparent;
 }
 [cmdk-list] {
-  max-height: 400px;
+  max-height: min(400px, 50vh);
   overflow-y: auto;
   scroll-padding: 8px;
+  -webkit-overflow-scrolling: touch;
 }
 [cmdk-item] {
   cursor: pointer;

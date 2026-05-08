@@ -156,38 +156,38 @@ export default function PromptEditor() {
   return (
     <>
       <header className="border-b border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex w-full items-start justify-between gap-4 px-6 pb-4 pt-6">
+        <div className="flex w-full items-start justify-between gap-3 px-4 pb-3 pt-4 md:px-6 md:pb-4 md:pt-6">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Untitled prompt"
-            className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700"
+            className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
           />
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-0.5">
             <button
               onClick={handleCopy}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
               title={copied ? 'Copied!' : 'Copy'}
             >
               {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
             </button>
             <button
               onClick={() => setShowLinkPicker(true)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
               title="Insert link"
             >
               <Link2 className="h-4 w-4" />
             </button>
             <button
               onClick={() => setShowStorageModal(true)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
               title="Save to Storage"
             >
               <Archive className="h-4 w-4" />
             </button>
             <button
               onClick={() => togglePin(prompt.id)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
             >
               <Star
                 className={clsx(
@@ -198,13 +198,13 @@ export default function PromptEditor() {
             </button>
             <button
               onClick={handleDelete}
-              className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
             >
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
         </div>
-        <div className="flex w-full flex-wrap items-center gap-x-3 gap-y-2 px-6 pb-3 text-xs text-gray-500 dark:text-zinc-400">
+        <div className="flex w-full flex-wrap items-center gap-x-3 gap-y-2 px-4 pb-3 text-xs text-gray-500 dark:text-zinc-400 md:px-6">
           <StatusBadge status={promptStatus} onChange={setPromptStatus} />
           <TagsEditor tags={tags} onChange={setTags} />
         </div>
@@ -240,7 +240,7 @@ export default function PromptEditor() {
       <Backlinks itemId={prompt.id} selfId={prompt.id} />
 
       <div className="border-t border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex w-full items-center justify-between px-6 py-2 text-xs text-gray-500 dark:text-zinc-400">
+        <div className="flex w-full items-center justify-between px-4 py-2 text-xs text-gray-500 dark:text-zinc-400 md:px-6">
           <span className="flex items-center gap-1.5">
             {status === 'saving' ? (
               <><Loader2 className="h-3 w-3 animate-spin" />Saving...</>

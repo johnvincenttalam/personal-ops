@@ -129,7 +129,7 @@ export function CommandPalette() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[15vh]"
+      className="fixed inset-0 z-50 flex items-start justify-center p-2 pt-3 sm:p-4 sm:pt-[15vh]"
       role="dialog"
       aria-modal="true"
     >
@@ -141,13 +141,13 @@ export function CommandPalette() {
       <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
         <Command label="Command palette" loop>
           <div className="flex items-center gap-3 border-b border-gray-200 px-4 dark:border-zinc-800">
-            <Search className="h-4 w-4 text-gray-400" />
+            <Search className="h-4 w-4 shrink-0 text-gray-400" />
             <Command.Input
               autoFocus
-              placeholder="Search notes, prompts, projects... or type a command"
-              className="flex-1 bg-transparent py-3.5 text-sm outline-none placeholder:text-gray-400"
+              placeholder="Search or type a command..."
+              className="flex-1 bg-transparent py-4 text-sm outline-none placeholder:text-gray-400"
             />
-            <kbd className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <kbd className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500 dark:bg-zinc-800 dark:text-zinc-400 sm:block">
               ESC
             </kbd>
           </div>
