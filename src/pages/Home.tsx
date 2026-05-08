@@ -54,28 +54,28 @@ export default function Home() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-gray-50 dark:bg-zinc-950">
-      {/* Each panel gets pb-[60px] on mobile to clear the bottom nav */}
+      {/* bg-* on each wrapper matches its inner panel so the pb-[55px] gap is invisible */}
       <div
         className={clsx(
-          'md:flex md:shrink-0 transition-[width] duration-150',
+          'md:flex md:shrink-0 transition-[width] duration-150 bg-white dark:bg-zinc-900',
           sidebarCollapsed ? 'md:w-16' : 'md:w-64',
-          mobileView === 'sidebar' ? 'flex w-full pb-[60px] md:pb-0' : 'hidden'
+          mobileView === 'sidebar' ? 'flex w-full pb-[55px] md:pb-0' : 'hidden'
         )}
       >
         <Sidebar />
       </div>
       <div
         className={clsx(
-          'md:flex md:w-[340px] md:shrink-0',
-          mobileView === 'list' ? 'flex w-full pb-[60px] md:pb-0' : 'hidden'
+          'md:flex md:w-[340px] md:shrink-0 bg-white dark:bg-zinc-900',
+          mobileView === 'list' ? 'flex w-full pb-[55px] md:pb-0' : 'hidden'
         )}
       >
         <ListPanel />
       </div>
       <div
         className={clsx(
-          'md:flex md:flex-1',
-          mobileView === 'editor' ? 'flex w-full flex-1 pb-[60px] md:pb-0' : 'hidden'
+          'md:flex md:flex-1 bg-white dark:bg-zinc-950',
+          mobileView === 'editor' ? 'flex w-full flex-1 pb-[55px] md:pb-0' : 'hidden'
         )}
       >
         <EditorPanel />

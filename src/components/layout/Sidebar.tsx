@@ -6,7 +6,6 @@ import {
   Sparkles,
   CheckSquare,
   Archive,
-  Shield,
   Settings,
   Trash2,
   Pencil,
@@ -117,9 +116,9 @@ export default function Sidebar() {
   if (collapsed) {
     return (
       <aside className="flex w-full flex-col items-center border-r border-gray-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
-        {/* Logo */}
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-white">
-          <Shield className="h-4 w-4" />
+        {/* Logo mark */}
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center">
+          <span className="text-xs font-bold leading-none tracking-tight text-brand-500">OPS</span>
         </div>
 
         {/* New */}
@@ -208,10 +207,9 @@ export default function Sidebar() {
     <aside className="flex w-full flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       {/* Brand */}
       <div className="flex items-center gap-2 px-4 py-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-white">
-          <Shield className="h-4 w-4" />
-        </div>
-        <span className="truncate font-semibold">Personal OPS</span>
+        <span className="truncate font-semibold text-gray-900 dark:text-zinc-100">
+          Personal <span className="text-brand-500">OPS</span>
+        </span>
         {/* Mobile close */}
         <button
           onClick={() => setMobileView('list')}

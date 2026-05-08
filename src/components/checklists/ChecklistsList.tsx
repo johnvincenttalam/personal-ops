@@ -81,7 +81,7 @@ export default function ChecklistsList() {
         <h2 className="text-xl font-bold text-gray-900 dark:text-zinc-100">Checklists</h2>
       </div>
 
-      <div className="border-b border-gray-200 px-5 py-2 dark:border-zinc-800" />
+      <div className="border-b border-gray-200 dark:border-zinc-800" />
 
       <div className="flex-1 overflow-y-auto">
         {loading ? (
@@ -115,7 +115,7 @@ export default function ChecklistsList() {
                 <span className="text-[11px] text-gray-400 dark:text-zinc-500">
                   {completed} / {total} done
                 </span>
-                <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="flex items-center gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
                   {otherProjects.length > 0 && (
                     <button
                       onClick={(e) => {
