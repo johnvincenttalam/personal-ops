@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  /* Default accent: violet */
+  --brand-50:  245 243 255;
+  --brand-100: 237 233 254;
+  --brand-500: 124 58 237;
+  --brand-600: 109 40 217;
+  --brand-700: 91 33 182;
+  --brand-hex: #7c3aed;
+  --brand-hex-light: #a78bfa;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  @apply bg-white text-gray-900 dark:bg-zinc-950 dark:text-zinc-100;
+}
+
+/* Slim scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 dark:bg-zinc-800 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-300 dark:bg-zinc-700;
+}
+
+/* cmdk Command Palette styles */
+[cmdk-root] {
+  width: 100%;
+}
+[cmdk-input] {
+  width: 100%;
+  outline: none;
+  background: transparent;
+}
+[cmdk-list] {
+  max-height: 400px;
+  overflow-y: auto;
+  scroll-padding: 8px;
+}
+[cmdk-item] {
+  cursor: pointer;
+  user-select: none;
+}
+[cmdk-item][data-selected='true'] {
+  @apply bg-gray-100 dark:bg-zinc-800;
+}
+[cmdk-group-heading] {
+  @apply px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500;
+}
+[cmdk-empty] {
+  @apply py-8 text-center text-sm text-gray-400 dark:text-zinc-500;
+}
+
+/* MDEditor: strip all chrome */
+.w-md-editor {
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+.w-md-editor-content,
+.w-md-editor-preview {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* CodeMirror: force transparent bg in dark mode so oneDark doesn't bleed */
+.dark .cm-editor,
+.dark .cm-scroller {
+  background: transparent !important;
+}
+
+/* Dark mode variables */
+.dark .w-md-editor {
+  --color-canvas-default: transparent;
+  --color-canvas-subtle: #27272a;
+  --color-border-default: #3f3f46;
+  --color-fg-default: #e4e4e7;
+  color: #e4e4e7;
+}
+
+/* Rendered markdown typography */
+.wmde-markdown {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.wmde-markdown h1,
+.wmde-markdown h2,
+.wmde-markdown h3,
+.wmde-markdown h4,
+.wmde-markdown h5 {
+  color: var(--brand-hex) !important;
+  font-weight: 600 !important;
+  margin-top: 1.25em !important;
+  margin-bottom: 0.4em !important;
+  line-height: 1.4 !important;
+}
+.dark .wmde-markdown h1,
+.dark .wmde-markdown h2,
+.dark .wmde-markdown h3,
+.dark .wmde-markdown h4,
+.dark .wmde-markdown h5 {
+  color: var(--brand-hex-light) !important;
+}
+
+.wmde-markdown p { margin-bottom: 0.75em !important; }
+
+.wmde-markdown ul,
+.wmde-markdown ol {
+  padding-left: 1.5em !important;
+  margin-bottom: 0.75em !important;
+}
+.wmde-markdown li { margin-bottom: 0.2em !important; }
+
+.wmde-markdown code:not(pre code) {
+  background: rgb(var(--brand-100)) !important;
+  color: var(--brand-hex) !important;
+  padding: 0.15em 0.4em !important;
+  border-radius: 4px !important;
+  font-size: 0.875em !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.dark .wmde-markdown code:not(pre code) {
+  background: rgb(var(--brand-500) / 0.15) !important;
+  color: var(--brand-hex-light) !important;
+}
+
+.wmde-markdown pre {
+  background: rgb(var(--brand-50)) !important;
+  border-radius: 8px !important;
+  padding: 1em 1.25em !important;
+  overflow-x: auto !important;
+  margin-bottom: 1em !important;
+}
+.dark .wmde-markdown pre {
+  background: #1e1b2e !important;
+}
+
+/* Mention pills (links with mention: scheme) */
+.wmde-markdown a[href^="mention:"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.05em 0.5em !important;
+  border-radius: 9999px !important;
+  background: rgb(var(--brand-100)) !important;
+  color: var(--brand-hex) !important;
+  font-weight: 500 !important;
+  font-size: 0.875em !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+  transition: background 0.12s ease !important;
+}
+.wmde-markdown a[href^="mention:"]:hover {
+  background: rgb(var(--brand-100) / 0.7) !important;
+  border-color: rgb(var(--brand-500) / 0.3) !important;
+}
+.dark .wmde-markdown a[href^="mention:"] {
+  background: rgb(var(--brand-500) / 0.15) !important;
+  color: var(--brand-hex-light) !important;
+}
+.dark .wmde-markdown a[href^="mention:"]:hover {
+  background: rgb(var(--brand-500) / 0.25) !important;
+}
+
+.wmde-markdown blockquote {
+  border-left: 3px solid var(--brand-hex) !important;
+  padding-left: 1em !important;
+  color: #6b7280 !important;
+  margin: 1em 0 !important;
+  font-style: italic;
+}
+
+.wmde-markdown hr {
+  border-color: #e5e7eb !important;
+  margin: 1.5em 0 !important;
+}
+.dark .wmde-markdown hr {
+  border-color: #3f3f46 !important;
+}
