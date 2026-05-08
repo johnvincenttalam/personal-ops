@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Star, Trash2, Calendar, Folder, Check, Loader2, Eye, Pencil, Circle, Archive, Link2 } from 'lucide-react'
+import { Star, Trash2, Calendar, Folder, Check, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical } from 'lucide-react'
 import MDEditor from '@uiw/react-md-editor'
 import clsx from 'clsx'
 import { useNoteStore } from '@/stores/useNoteStore'
@@ -45,7 +45,18 @@ export default function NoteEditor() {
   const [mode, setMode] = useState<'edit' | 'preview'>('edit')
   const [showStorageModal, setShowStorageModal] = useState(false)
   const [showLinkPicker, setShowLinkPicker] = useState(false)
+  const [showKebab, setShowKebab] = useState(false)
+  const kebabRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 })
+
+  useEffect(() => {
+    if (!showKebab) return
+    const handler = (e: MouseEvent) => {
+      if (kebabRef.current && !kebabRef.current.contains(e.target as Node)) setShowKebab(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [showKebab])
 
   useEffect(() => {
     setTitle(note?.title ?? '')
@@ -130,7 +141,49 @@ export default function NoteEditor() {
             placeholder="Untitled"
             className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
           />
-          <div className="flex shrink-0 items-center gap-0.5">
+          {/* Mobile: kebab menu */}
+          <div className="relative shrink-0 sm:hidden" ref={kebabRef}>
+            <button
+              onClick={() => setShowKebab((v) => !v)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800"
+              aria-label="More actions"
+            >
+              <MoreVertical className="h-5 w-5" />
+            </button>
+            {showKebab && (
+              <div className="absolute right-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+                <button
+                  onClick={() => { setShowLinkPicker(true); setShowKebab(false) }}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                >
+                  <Link2 className="h-4 w-4 shrink-0 text-gray-400" /> Insert link
+                </button>
+                <button
+                  onClick={() => { setShowStorageModal(true); setShowKebab(false) }}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                >
+                  <Archive className="h-4 w-4 shrink-0 text-gray-400" /> Save to Storage
+                </button>
+                <button
+                  onClick={() => { togglePin(note.id); setShowKebab(false) }}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                >
+                  <Star className={clsx('h-4 w-4 shrink-0', note.is_pinned ? 'fill-brand-500 text-brand-500' : 'text-gray-400')} />
+                  {note.is_pinned ? 'Unpin' : 'Pin'}
+                </button>
+                <div className="border-t border-gray-100 dark:border-zinc-800" />
+                <button
+                  onClick={() => { handleDelete(); setShowKebab(false) }}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                >
+                  <Trash2 className="h-4 w-4 shrink-0" /> Delete note
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Desktop: individual icon buttons */}
+          <div className="hidden shrink-0 items-center gap-0.5 sm:flex">
             <button
               onClick={() => setShowLinkPicker(true)}
               className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
