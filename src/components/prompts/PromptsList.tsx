@@ -243,7 +243,7 @@ export default function PromptsList() {
       <button
         onClick={handleNew}
         disabled={!activeProjectId}
-        className="flex items-center justify-center gap-2 border-t border-gray-200 px-5 py-3 text-sm font-medium text-brand-600 transition hover:bg-gray-50 disabled:opacity-40 dark:border-zinc-800 dark:text-brand-400 dark:hover:bg-zinc-800/50"
+        className="hidden md:flex items-center justify-center gap-2 border-t border-gray-200 px-5 py-3 text-sm font-medium text-brand-600 transition hover:bg-gray-50 disabled:opacity-40 dark:border-zinc-800 dark:text-brand-400 dark:hover:bg-zinc-800/50"
       >
         <Plus className="h-4 w-4" /> New Prompt
       </button>

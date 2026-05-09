@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus, Trash2, Check } from 'lucide-react'
+import { ArrowLeft, Plus, Trash2, Check } from 'lucide-react'
 import clsx from 'clsx'
 import { useChecklistStore } from '@/stores/useChecklistStore'
 import { useProjectStore } from '@/stores/useProjectStore'
@@ -87,7 +87,25 @@ export default function ChecklistView() {
   return (
     <>
       <header className="border-b border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="w-full px-4 pb-4 pt-5 md:px-6 md:pt-6">
+        {/* Mobile nav row: back + delete */}
+        <div className="flex items-center justify-between px-2 pb-1 pt-2 sm:hidden">
+          <button
+            onClick={() => setMobileView('list')}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={handleDeleteList}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+            aria-label="Delete checklist"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="w-full px-4 pb-4 pt-2 sm:pt-5 md:px-6 md:pt-6">
           <div className="flex items-start justify-between gap-3">
             <input
               value={list.content}
@@ -97,7 +115,7 @@ export default function ChecklistView() {
             />
             <button
               onClick={handleDeleteList}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 sm:flex"
               aria-label="Delete checklist"
             >
               <Trash2 className="h-4 w-4" />

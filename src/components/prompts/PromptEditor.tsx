@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Star, Copy, Check, Trash2, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical } from 'lucide-react'
+import { ArrowLeft, Star, Copy, Check, Trash2, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical } from 'lucide-react'
 import CodeMirror, { type ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -167,15 +167,16 @@ export default function PromptEditor() {
   return (
     <>
       <header className="border-b border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex w-full items-start justify-between gap-3 px-4 pb-3 pt-4 md:px-6 md:pb-4 md:pt-6">
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Untitled prompt"
-            className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
-          />
-          {/* Mobile: kebab menu */}
-          <div className="relative shrink-0 sm:hidden" ref={kebabRef}>
+        {/* Mobile nav row: back + kebab */}
+        <div className="flex items-center justify-between px-2 pb-1 pt-2 sm:hidden">
+          <button
+            onClick={() => setMobileView('list')}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <div className="relative" ref={kebabRef}>
             <button
               onClick={() => setShowKebab((v) => !v)}
               className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800"
@@ -185,82 +186,56 @@ export default function PromptEditor() {
             </button>
             {showKebab && (
               <div className="absolute right-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-                <button
-                  onClick={() => { handleCopy(); setShowKebab(false) }}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                >
-                  {copied
-                    ? <Check className="h-4 w-4 shrink-0 text-emerald-500" />
-                    : <Copy className="h-4 w-4 shrink-0 text-gray-400" />}
+                <button onClick={() => { handleCopy(); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  {copied ? <Check className="h-4 w-4 shrink-0 text-emerald-500" /> : <Copy className="h-4 w-4 shrink-0 text-gray-400" />}
                   {copied ? 'Copied!' : 'Copy content'}
                 </button>
-                <button
-                  onClick={() => { setShowLinkPicker(true); setShowKebab(false) }}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                >
+                <button onClick={() => { setShowLinkPicker(true); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
                   <Link2 className="h-4 w-4 shrink-0 text-gray-400" /> Insert link
                 </button>
-                <button
-                  onClick={() => { setShowStorageModal(true); setShowKebab(false) }}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                >
+                <button onClick={() => { setShowStorageModal(true); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
                   <Archive className="h-4 w-4 shrink-0 text-gray-400" /> Save to Storage
                 </button>
-                <button
-                  onClick={() => { togglePin(prompt.id); setShowKebab(false) }}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                >
+                <button onClick={() => { togglePin(prompt.id); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
                   <Star className={clsx('h-4 w-4 shrink-0', prompt.is_pinned ? 'fill-brand-500 text-brand-500' : 'text-gray-400')} />
                   {prompt.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
                 <div className="border-t border-gray-100 dark:border-zinc-800" />
-                <button
-                  onClick={() => { handleDelete(); setShowKebab(false) }}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
-                >
+                <button onClick={() => { handleDelete(); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">
                   <Trash2 className="h-4 w-4 shrink-0" /> Delete prompt
                 </button>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Desktop: individual icon buttons */}
+        {/* Title + desktop actions */}
+        <div className="flex w-full items-start justify-between gap-3 px-4 pb-3 pt-2 sm:pt-4 md:px-6 md:pb-4 md:pt-6">
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Untitled prompt"
+            className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
+          />
           <div className="hidden shrink-0 items-center gap-0.5 sm:flex">
-            <button
-              onClick={handleCopy}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-              title={copied ? 'Copied!' : 'Copy'}
-            >
+            <button onClick={handleCopy} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title={copied ? 'Copied!' : 'Copy'}>
               {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
             </button>
-            <button
-              onClick={() => setShowLinkPicker(true)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-              title="Insert link"
-            >
+            <button onClick={() => setShowLinkPicker(true)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Insert link">
               <Link2 className="h-4 w-4" />
             </button>
-            <button
-              onClick={() => setShowStorageModal(true)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-              title="Save to Storage"
-            >
+            <button onClick={() => setShowStorageModal(true)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Save to Storage">
               <Archive className="h-4 w-4" />
             </button>
-            <button
-              onClick={() => togglePin(prompt.id)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-            >
+            <button onClick={() => togglePin(prompt.id)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800">
               <Star className={clsx('h-4 w-4', prompt.is_pinned && 'fill-brand-500 text-brand-500')} />
             </button>
-            <button
-              onClick={handleDelete}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
-            >
+            <button onClick={handleDelete} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
         </div>
+
         <div className="flex w-full flex-wrap items-center gap-x-3 gap-y-2 px-4 pb-3 text-xs text-gray-500 dark:text-zinc-400 md:px-6">
           <StatusBadge status={promptStatus} onChange={setPromptStatus} />
           <TagsEditor tags={tags} onChange={setTags} />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Copy, Check, Trash2, Loader2, Calendar, Folder, Sparkles, FileText, Hand, Circle, Link2 } from 'lucide-react'
+import { ArrowLeft, Copy, Check, Trash2, Loader2, Calendar, Folder, Sparkles, FileText, Hand, Circle, Link2 } from 'lucide-react'
 import CodeMirror, { type ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -167,32 +167,43 @@ export default function StorageView() {
   return (
     <>
       <header className="border-b border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex w-full items-start justify-between gap-4 px-6 pb-2 pt-6">
+        {/* Mobile nav row: back + actions */}
+        <div className="flex items-center justify-between px-2 pb-1 pt-2 sm:hidden">
+          <button
+            onClick={() => setMobileView('list')}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <div className="flex items-center gap-0.5">
+            <button onClick={handleCopy} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title={copied ? 'Copied!' : 'Copy content'}>
+              {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
+            </button>
+            <button onClick={() => setShowLinkPicker(true)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Insert link">
+              <Link2 className="h-4 w-4" />
+            </button>
+            <button onClick={handleDelete} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex w-full items-start justify-between gap-4 px-4 pb-2 pt-2 sm:pt-6 md:px-6">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Snippet name"
-            className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700"
+            className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 sm:text-2xl"
           />
-          <div className="flex items-center gap-1">
-            <button
-              onClick={handleCopy}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-              title={copied ? 'Copied!' : 'Copy content'}
-            >
+          <div className="hidden items-center gap-1 sm:flex">
+            <button onClick={handleCopy} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title={copied ? 'Copied!' : 'Copy content'}>
               {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
             </button>
-            <button
-              onClick={() => setShowLinkPicker(true)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800"
-              title="Insert link"
-            >
+            <button onClick={() => setShowLinkPicker(true)} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Insert link">
               <Link2 className="h-4 w-4" />
             </button>
-            <button
-              onClick={handleDelete}
-              className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
-            >
+            <button onClick={handleDelete} className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
               <Trash2 className="h-4 w-4" />
             </button>
           </div>

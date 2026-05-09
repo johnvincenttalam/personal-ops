@@ -26,7 +26,7 @@ function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex items-stretch border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/95 md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-30 flex items-stretch border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/95 md:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       {BOTTOM_TABS.map(({ id, icon: Icon, label }) => (
@@ -50,28 +50,50 @@ function MobileBottomNav() {
 
 export default function Home() {
   const mobileView = useUIStore((s) => s.mobileView)
+  const setMobileView = useUIStore((s) => s.setMobileView)
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed)
+
+  const sidebarOpen = mobileView === 'sidebar'
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-gray-50 dark:bg-zinc-950">
-      {/* bg-* on each wrapper matches its inner panel so the pb-[55px] gap is invisible */}
+
+      {/* Backdrop — fades in behind the sidebar on mobile */}
       <div
         className={clsx(
-          'md:flex md:shrink-0 transition-[width] duration-150 bg-white dark:bg-zinc-900',
+          'fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden',
+          'transition-opacity duration-300 ease-in-out',
+          sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}
+        onClick={() => setMobileView('list')}
+      />
+
+      {/* Sidebar — fixed overlay on mobile, static column on desktop */}
+      <div
+        className={clsx(
+          // Mobile: fixed drawer that slides in from the left
+          'fixed inset-y-0 left-0 z-50 flex w-4/5 max-w-xs bg-white dark:bg-zinc-900',
+          'transition-transform duration-300 ease-in-out',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+          // Desktop: static layout column, transition on width collapse
+          'md:relative md:inset-auto md:z-auto md:translate-x-0 md:flex md:shrink-0 md:transition-[width] md:duration-150',
           sidebarCollapsed ? 'md:w-16' : 'md:w-64',
-          mobileView === 'sidebar' ? 'flex w-full pb-[55px] md:pb-0' : 'hidden'
         )}
       >
         <Sidebar />
       </div>
+
+      {/* List panel — always rendered on mobile so it peeks behind the sidebar overlay */}
       <div
         className={clsx(
           'md:flex md:w-[340px] md:shrink-0 bg-white dark:bg-zinc-900',
-          mobileView === 'list' ? 'flex w-full pb-[55px] md:pb-0' : 'hidden'
+          mobileView !== 'editor' ? 'flex w-full pb-[55px] md:pb-0' : 'hidden'
         )}
       >
         <ListPanel />
       </div>
+
+      {/* Editor panel */}
       <div
         className={clsx(
           'md:flex md:flex-1 bg-white dark:bg-zinc-950',

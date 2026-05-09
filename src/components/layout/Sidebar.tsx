@@ -28,6 +28,16 @@ import SettingsModal from '@/components/shared/SettingsModal'
 import { SidebarProjectsSkeleton } from '@/components/shared/Skeletons'
 import type { Tab, Project } from '@/types'
 
+function AppLogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 289 289" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <rect x="7.5" y="7.5" width="274" height="274" rx="57.5" stroke="currentColor" strokeWidth="15" />
+      <path d="M70.1871 90.1881C68.1463 92.2322 67 95.0029 67 97.8918C67 100.781 68.1463 103.551 70.1871 105.595L109.71 145.131L70.1871 184.667C68.2621 186.733 67.2141 189.467 67.2639 192.291C67.3138 195.115 68.4575 197.81 70.4541 199.807C72.4508 201.804 75.1445 202.948 77.9678 202.998C80.791 203.048 83.5234 202 85.5893 200.074L132.813 152.835C134.854 150.791 136 148.02 136 145.131C136 142.242 134.854 139.472 132.813 137.428L85.5893 90.1881C83.5459 88.1467 80.7761 87 77.8882 87C75.0003 87 72.2304 88.1467 70.1871 90.1881Z" fill="currentColor" />
+      <rect x="141" y="181" width="82" height="22" rx="11" fill="currentColor" />
+    </svg>
+  )
+}
+
 const TABS: { id: Tab; label: string; icon: typeof FileText }[] = [
   { id: 'prompts', label: 'Prompts', icon: Sparkles },
   { id: 'notes', label: 'Notes', icon: FileText },
@@ -117,8 +127,8 @@ export default function Sidebar() {
     return (
       <aside className="flex w-full flex-col items-center border-r border-gray-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
         {/* Logo mark */}
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center">
-          <span className="text-xs font-bold leading-none tracking-tight text-brand-500">OPS</span>
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center text-brand-500">
+          <AppLogoMark className="h-7 w-7" />
         </div>
 
         {/* New */}
@@ -207,6 +217,7 @@ export default function Sidebar() {
     <aside className="flex w-full flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       {/* Brand */}
       <div className="flex items-center gap-2 px-4 py-3">
+        <AppLogoMark className="h-6 w-6 shrink-0 text-brand-500" />
         <span className="truncate font-semibold text-gray-900 dark:text-zinc-100">
           Personal <span className="text-brand-500">OPS</span>
         </span>

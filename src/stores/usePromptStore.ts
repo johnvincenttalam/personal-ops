@@ -32,7 +32,9 @@ export const usePromptStore = create<PromptState>((set, get) => ({
     set({ loading: true })
     try {
       const prompts = await svc.list(projectId)
-      set({ prompts, loading: false, activePromptId: prompts[0]?.id ?? null })
+      const currentId = get().activePromptId
+      const keepCurrent = currentId != null && prompts.some((p) => p.id === currentId)
+      set({ prompts, loading: false, activePromptId: keepCurrent ? currentId : (prompts[0]?.id ?? null) })
     } catch (e) {
       console.error('[prompts] fetch', e)
       set({ loading: false })
