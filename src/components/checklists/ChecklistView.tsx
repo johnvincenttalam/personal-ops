@@ -17,7 +17,6 @@ export default function ChecklistView() {
   const toggleComplete = useChecklistStore((s) => s.toggleComplete)
   const deleteItem = useChecklistStore((s) => s.deleteItem)
   const createItem = useChecklistStore((s) => s.createItem)
-  const createList = useChecklistStore((s) => s.createList)
   const setActiveList = useChecklistStore((s) => s.setActiveList)
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
   const setMobileView = useUIStore((s) => s.setMobileView)

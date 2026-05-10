@@ -49,7 +49,6 @@ export default function StorageView() {
   const loading = useStorageStore((s) => s.loading)
   const save = useStorageStore((s) => s.save)
   const deleteItem = useStorageStore((s) => s.deleteItem)
-  const createItem = useStorageStore((s) => s.createItem)
   const setActiveItem = useStorageStore((s) => s.setActiveItem)
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
   const project = useProjectStore((s) =>

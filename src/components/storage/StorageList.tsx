@@ -28,7 +28,6 @@ export default function StorageList() {
   const loading = useStorageStore((s) => s.loading)
   const fetchItems = useStorageStore((s) => s.fetchItems)
   const setActiveItem = useStorageStore((s) => s.setActiveItem)
-  const createItem = useStorageStore((s) => s.createItem)
   const deleteItem = useStorageStore((s) => s.deleteItem)
   const setMobileView = useUIStore((s) => s.setMobileView)
   const openNewItem = useUIStore((s) => s.openNewItem)

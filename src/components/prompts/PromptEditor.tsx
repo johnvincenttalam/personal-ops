@@ -57,7 +57,6 @@ export default function PromptEditor() {
   const save = usePromptStore((s) => s.save)
   const togglePin = usePromptStore((s) => s.togglePin)
   const deletePrompt = usePromptStore((s) => s.deletePrompt)
-  const createPrompt = usePromptStore((s) => s.createPrompt)
   const setActivePrompt = usePromptStore((s) => s.setActivePrompt)
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
   const theme = useUIStore((s) => s.theme)

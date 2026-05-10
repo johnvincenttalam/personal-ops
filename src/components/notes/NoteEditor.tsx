@@ -31,7 +31,6 @@ export default function NoteEditor() {
   const save = useNoteStore((s) => s.save)
   const togglePin = useNoteStore((s) => s.togglePin)
   const deleteNote = useNoteStore((s) => s.deleteNote)
-  const createNote = useNoteStore((s) => s.createNote)
   const setActiveNote = useNoteStore((s) => s.setActiveNote)
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
   const project = useProjectStore((s) =>
