@@ -14,6 +14,7 @@ import { EditorSkeleton } from '@/components/shared/Skeletons'
 import TagsEditor from '@/components/shared/TagsEditor'
 import LinkPicker from '@/components/shared/LinkPicker'
 import Backlinks from '@/components/shared/Backlinks'
+import ExportMenu from '@/components/shared/ExportMenu'
 import { formatMention } from '@/domain/rules/parseMentions'
 import type { Mention } from '@/domain/rules/parseMentions'
 import type { StorageSourceType } from '@/types'
@@ -117,10 +118,9 @@ export default function StorageView() {
           </div>
         )}
         <button
-          onClick={async () => {
+          onClick={() => {
             if (!activeProjectId) return
-            await createItem(activeProjectId)
-            setMobileView('editor')
+            useUIStore.getState().openNewItem('storage')
           }}
           disabled={!activeProjectId}
           className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
@@ -183,6 +183,7 @@ export default function StorageView() {
             <button onClick={() => setShowLinkPicker(true)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Insert link">
               <Link2 className="h-4 w-4" />
             </button>
+            <ExportMenu filename={name || 'untitled-snippet'} content={content} />
             <button onClick={handleDelete} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
               <Trash2 className="h-4 w-4" />
             </button>
@@ -203,6 +204,7 @@ export default function StorageView() {
             <button onClick={() => setShowLinkPicker(true)} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" title="Insert link">
               <Link2 className="h-4 w-4" />
             </button>
+            <ExportMenu filename={name || 'untitled-snippet'} content={content} />
             <button onClick={handleDelete} className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
               <Trash2 className="h-4 w-4" />
             </button>

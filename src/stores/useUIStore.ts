@@ -12,12 +12,15 @@ interface UIState {
   searchOpen: boolean
   mobileView: MobileView
   sidebarCollapsed: boolean
+  newItemTab: Tab | null
   setActiveTab: (tab: Tab) => void
   toggleTheme: () => void
   setAccent: (accent: AccentColor) => void
   setSearchOpen: (open: boolean) => void
   setMobileView: (view: MobileView) => void
   toggleSidebar: () => void
+  openNewItem: (tab: Tab) => void
+  closeNewItem: () => void
 }
 
 export const useUIStore = create<UIState>()(
@@ -29,6 +32,7 @@ export const useUIStore = create<UIState>()(
       searchOpen: false,
       mobileView: 'list',
       sidebarCollapsed: false,
+      newItemTab: null,
       setActiveTab: (tab) => set({ activeTab: tab }),
       toggleTheme: () =>
         set((s) => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
@@ -36,6 +40,8 @@ export const useUIStore = create<UIState>()(
       setSearchOpen: (open) => set({ searchOpen: open }),
       setMobileView: (view) => set({ mobileView: view }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      openNewItem: (tab) => set({ newItemTab: tab }),
+      closeNewItem: () => set({ newItemTab: null }),
     }),
     {
       name: 'personal-ops-ui',

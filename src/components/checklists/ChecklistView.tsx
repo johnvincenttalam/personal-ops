@@ -7,6 +7,7 @@ import { useUIStore } from '@/stores/useUIStore'
 import WelcomePanel from '@/components/shared/WelcomePanel'
 import { confirmDialog } from '@/components/shared/ConfirmDialog'
 import { EditorSkeleton } from '@/components/shared/Skeletons'
+import ExportMenu from '@/components/shared/ExportMenu'
 
 export default function ChecklistView() {
   const allItems = useChecklistStore((s) => s.items)
@@ -50,10 +51,9 @@ export default function ChecklistView() {
           setActiveList(id)
           setMobileView('editor')
         }}
-        onCreate={async () => {
+        onCreate={() => {
           if (!activeProjectId) return
-          await createList(activeProjectId)
-          setMobileView('editor')
+          useUIStore.getState().openNewItem('checklists')
         }}
         createLabel="New Checklist"
         disabled={!activeProjectId}
@@ -63,6 +63,12 @@ export default function ChecklistView() {
 
   const completed = items.filter((i) => i.is_completed).length
   const total = items.length
+
+  const exportContent = [
+    `# ${list.content || 'Untitled list'}`,
+    '',
+    ...items.map((i) => `- [${i.is_completed ? 'x' : ' '}] ${i.content}`),
+  ].join('\n')
 
   const handleAdd = async () => {
     const content = draft.trim()
@@ -96,13 +102,16 @@ export default function ChecklistView() {
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
-          <button
-            onClick={handleDeleteList}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
-            aria-label="Delete checklist"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-0.5">
+            <ExportMenu filename={list.content || 'untitled-checklist'} content={exportContent} />
+            <button
+              onClick={handleDeleteList}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+              aria-label="Delete checklist"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         <div className="w-full px-4 pb-4 pt-2 sm:pt-5 md:px-6 md:pt-6">
@@ -113,13 +122,16 @@ export default function ChecklistView() {
               placeholder="Untitled list"
               className="w-full bg-transparent text-xl font-semibold outline-none placeholder:text-gray-300 dark:placeholder:text-zinc-700 md:text-2xl"
             />
-            <button
-              onClick={handleDeleteList}
-              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 sm:flex"
-              aria-label="Delete checklist"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            <div className="hidden shrink-0 items-center gap-0.5 sm:flex">
+              <ExportMenu filename={list.content || 'untitled-checklist'} content={exportContent} />
+              <button
+                onClick={handleDeleteList}
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+                aria-label="Delete checklist"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
           </div>
           <div className="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-zinc-400">
             <span>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Star, Copy, Check, Trash2, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical } from 'lucide-react'
+import { ArrowLeft, Star, Copy, Check, Trash2, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical, Download } from 'lucide-react'
 import CodeMirror, { type ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -15,6 +15,8 @@ import { EditorSkeleton } from '@/components/shared/Skeletons'
 import StatusBadge from '@/components/shared/StatusBadge'
 import TagsEditor from '@/components/shared/TagsEditor'
 import SaveToStorageModal from '@/components/shared/SaveToStorageModal'
+import ExportMenu from '@/components/shared/ExportMenu'
+import { downloadTextFile, slugifyFilename } from '@/lib/download'
 import LinkPicker from '@/components/shared/LinkPicker'
 import MentionMarkdown from '@/components/shared/MentionMarkdown'
 import Backlinks from '@/components/shared/Backlinks'
@@ -122,10 +124,9 @@ export default function PromptEditor() {
           setActivePrompt(id)
           setMobileView('editor')
         }}
-        onCreate={async () => {
+        onCreate={() => {
           if (!activeProjectId) return
-          await createPrompt(activeProjectId)
-          setMobileView('editor')
+          useUIStore.getState().openNewItem('prompts')
         }}
         createLabel="New Prompt"
         disabled={!activeProjectId}
@@ -147,6 +148,12 @@ export default function PromptEditor() {
       variant: 'danger',
     })
     if (ok) await deletePrompt(prompt.id)
+  }
+
+  const handleDownload = (ext: 'md' | 'txt') => {
+    const base = slugifyFilename(title || 'untitled-prompt')
+    const mime = ext === 'md' ? 'text/markdown' : 'text/plain'
+    downloadTextFile(`${base}.${ext}`, content, mime)
   }
 
   const insertMention = (m: Mention) => {
@@ -201,6 +208,13 @@ export default function PromptEditor() {
                   {prompt.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
                 <div className="border-t border-gray-100 dark:border-zinc-800" />
+                <button onClick={() => { handleDownload('md'); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  <Download className="h-4 w-4 shrink-0 text-gray-400" /> Download as .md
+                </button>
+                <button onClick={() => { handleDownload('txt'); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  <Download className="h-4 w-4 shrink-0 text-gray-400" /> Download as .txt
+                </button>
+                <div className="border-t border-gray-100 dark:border-zinc-800" />
                 <button onClick={() => { handleDelete(); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">
                   <Trash2 className="h-4 w-4 shrink-0" /> Delete prompt
                 </button>
@@ -230,6 +244,7 @@ export default function PromptEditor() {
             <button onClick={() => togglePin(prompt.id)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800">
               <Star className={clsx('h-4 w-4', prompt.is_pinned && 'fill-brand-500 text-brand-500')} />
             </button>
+            <ExportMenu filename={title || 'untitled-prompt'} content={content} />
             <button onClick={handleDelete} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10">
               <Trash2 className="h-4 w-4" />
             </button>

@@ -22,6 +22,7 @@ export default function ChecklistsList() {
   const deleteItem = useChecklistStore((s) => s.deleteItem)
   const moveList = useChecklistStore((s) => s.moveList)
   const setMobileView = useUIStore((s) => s.setMobileView)
+  const openNewItem = useUIStore((s) => s.openNewItem)
 
   const [movingId, setMovingId] = useState<string | null>(null)
 
@@ -60,10 +61,9 @@ export default function ChecklistsList() {
     setMobileView('editor')
   }
 
-  const handleNew = async () => {
+  const handleNew = () => {
     if (!activeProjectId) return
-    await createList(activeProjectId)
-    setMobileView('editor')
+    openNewItem('checklists')
   }
 
   const handlePickTemplate = async (id: string) => {

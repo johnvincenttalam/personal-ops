@@ -28,6 +28,7 @@ export default function PromptsList() {
   const duplicatePrompt = usePromptStore((s) => s.duplicatePrompt)
   const movePrompt = usePromptStore((s) => s.movePrompt)
   const setMobileView = useUIStore((s) => s.setMobileView)
+  const openNewItem = useUIStore((s) => s.openNewItem)
 
   const [movingId, setMovingId] = useState<string | null>(null)
 
@@ -87,10 +88,9 @@ export default function PromptsList() {
     await movePrompt(promptId, targetProjectId)
   }
 
-  const handleNew = async () => {
+  const handleNew = () => {
     if (!activeProjectId) return
-    await createPrompt(activeProjectId)
-    setMobileView('editor')
+    openNewItem('prompts')
   }
 
   const handlePickTemplate = async (id: string) => {

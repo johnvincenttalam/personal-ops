@@ -16,10 +16,6 @@ import {
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useProjectStore } from '@/stores/useProjectStore'
-import { useNoteStore } from '@/stores/useNoteStore'
-import { usePromptStore } from '@/stores/usePromptStore'
-import { useChecklistStore } from '@/stores/useChecklistStore'
-import { useStorageStore } from '@/stores/useStorageStore'
 import { useUIStore } from '@/stores/useUIStore'
 import { colorDot } from '@/components/shared/colors'
 import { confirmDialog } from '@/components/shared/ConfirmDialog'
@@ -59,11 +55,7 @@ export default function Sidebar() {
   const setSearchOpen = useUIStore((s) => s.setSearchOpen)
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed)
   const toggleSidebar = useUIStore((s) => s.toggleSidebar)
-
-  const createNote = useNoteStore((s) => s.createNote)
-  const createPrompt = usePromptStore((s) => s.createPrompt)
-  const createList = useChecklistStore((s) => s.createList)
-  const createStorage = useStorageStore((s) => s.createItem)
+  const openNewItem = useUIStore((s) => s.openNewItem)
 
   const updateProject = useProjectStore((s) => s.updateProject)
 
@@ -73,17 +65,14 @@ export default function Sidebar() {
 
   const collapsed = sidebarCollapsed
 
-  const handleNew = async () => {
+  const handleNew = () => {
     if (!activeProjectId) {
       if (collapsed) toggleSidebar()
       setShowCreateModal(true)
       return
     }
-    if (activeTab === 'notes') await createNote(activeProjectId)
-    else if (activeTab === 'prompts') await createPrompt(activeProjectId)
-    else if (activeTab === 'checklists') await createList(activeProjectId)
-    else if (activeTab === 'storage') await createStorage(activeProjectId)
-    setMobileView('editor')
+    setMobileView('list')
+    openNewItem(activeTab)
   }
 
   const handleStartCreating = () => {
@@ -209,6 +198,15 @@ export default function Sidebar() {
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
+
+        {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+
+        {showCreateModal && (
+          <ProjectEditModal
+            onSave={(data) => createProject(data.name, data.color, data.description, data.tags)}
+            onClose={() => setShowCreateModal(false)}
+          />
+        )}
       </aside>
     )
   }
@@ -350,8 +348,8 @@ export default function Sidebar() {
         )}
       </nav>
 
-      {/* Footer */}
-      <div className="mt-auto border-t border-gray-200 px-2 py-3 dark:border-zinc-800">
+      {/* Footer (desktop only — Settings moved to mobile bottom nav) */}
+      <div className="mt-auto hidden border-t border-gray-200 px-2 py-3 dark:border-zinc-800 md:block">
         <button
           onClick={() => setShowSettings(true)}
           className="flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -362,7 +360,7 @@ export default function Sidebar() {
         <button
           onClick={toggleSidebar}
           title="Collapse sidebar"
-          className="hidden w-full items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800 md:flex"
+          className="flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
         >
           <ChevronLeft className="h-4 w-4 shrink-0" />
           <span>Collapse</span>

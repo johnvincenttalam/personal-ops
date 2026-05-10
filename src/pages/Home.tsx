@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import clsx from 'clsx'
-import { FileText, Sparkles, CheckSquare, Archive } from 'lucide-react'
+import { FileText, Sparkles, CheckSquare, Archive, Settings } from 'lucide-react'
 import Sidebar from '@/components/layout/Sidebar'
 import ListPanel from '@/components/layout/ListPanel'
 import EditorPanel from '@/components/layout/EditorPanel'
+import SettingsModal from '@/components/shared/SettingsModal'
+import NewItemModal from '@/components/shared/NewItemModal'
 import { useUIStore } from '@/stores/useUIStore'
+import { useProjectStore } from '@/stores/useProjectStore'
 import type { Tab } from '@/types'
 
 const BOTTOM_TABS: { id: Tab; icon: typeof FileText; label: string }[] = [
@@ -19,32 +23,45 @@ function MobileBottomNav() {
   const mobileView = useUIStore((s) => s.mobileView)
   const setMobileView = useUIStore((s) => s.setMobileView)
 
+  const [showSettings, setShowSettings] = useState(false)
+
   const handleTabPress = (tab: Tab) => {
     setActiveTab(tab)
     setMobileView('list')
   }
 
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex items-stretch border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/95 md:hidden"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-    >
-      {BOTTOM_TABS.map(({ id, icon: Icon, label }) => (
+    <>
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-30 flex items-stretch border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/95 md:hidden"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      >
+        {BOTTOM_TABS.map(({ id, icon: Icon, label }) => (
+          <button
+            key={id}
+            onClick={() => handleTabPress(id)}
+            className={clsx(
+              'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
+              activeTab === id && mobileView !== 'sidebar'
+                ? 'text-brand-600 dark:text-brand-400'
+                : 'text-gray-500 dark:text-zinc-400'
+            )}
+          >
+            <Icon className="h-5 w-5" />
+            <span>{label}</span>
+          </button>
+        ))}
         <button
-          key={id}
-          onClick={() => handleTabPress(id)}
-          className={clsx(
-            'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
-            activeTab === id && mobileView !== 'sidebar'
-              ? 'text-brand-600 dark:text-brand-400'
-              : 'text-gray-500 dark:text-zinc-400'
-          )}
+          onClick={() => setShowSettings(true)}
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium text-gray-500 transition-colors dark:text-zinc-400"
+          aria-label="Settings"
         >
-          <Icon className="h-5 w-5" />
-          <span>{label}</span>
+          <Settings className="h-5 w-5" />
+          <span>Settings</span>
         </button>
-      ))}
-    </nav>
+      </nav>
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+    </>
   )
 }
 
@@ -52,6 +69,9 @@ export default function Home() {
   const mobileView = useUIStore((s) => s.mobileView)
   const setMobileView = useUIStore((s) => s.setMobileView)
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed)
+  const newItemTab = useUIStore((s) => s.newItemTab)
+  const closeNewItem = useUIStore((s) => s.closeNewItem)
+  const activeProjectId = useProjectStore((s) => s.activeProjectId)
 
   const sidebarOpen = mobileView === 'sidebar'
 
@@ -105,6 +125,15 @@ export default function Home() {
 
       {/* Bottom navigation — mobile only */}
       <MobileBottomNav />
+
+      {/* Global new-item modal */}
+      {newItemTab && activeProjectId && (
+        <NewItemModal
+          tab={newItemTab}
+          projectId={activeProjectId}
+          onClose={closeNewItem}
+        />
+      )}
     </div>
   )
 }

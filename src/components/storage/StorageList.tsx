@@ -31,6 +31,7 @@ export default function StorageList() {
   const createItem = useStorageStore((s) => s.createItem)
   const deleteItem = useStorageStore((s) => s.deleteItem)
   const setMobileView = useUIStore((s) => s.setMobileView)
+  const openNewItem = useUIStore((s) => s.openNewItem)
 
   useEffect(() => {
     if (activeProjectId) fetchItems(activeProjectId)
@@ -41,10 +42,9 @@ export default function StorageList() {
     setMobileView('editor')
   }
 
-  const handleNew = async () => {
+  const handleNew = () => {
     if (!activeProjectId) return
-    await createItem(activeProjectId)
-    setMobileView('editor')
+    openNewItem('storage')
   }
 
   const handleDelete = async (e: React.MouseEvent, item: StorageItem) => {

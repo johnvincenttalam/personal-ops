@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Star, Trash2, Calendar, Folder, Check, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical } from 'lucide-react'
+import { ArrowLeft, Star, Trash2, Calendar, Folder, Check, Loader2, Eye, Pencil, Circle, Archive, Link2, MoreVertical, Download } from 'lucide-react'
 import MDEditor from '@uiw/react-md-editor'
 import clsx from 'clsx'
 import { useNoteStore } from '@/stores/useNoteStore'
@@ -13,6 +13,8 @@ import { EditorSkeleton } from '@/components/shared/Skeletons'
 import StatusBadge from '@/components/shared/StatusBadge'
 import TagsEditor from '@/components/shared/TagsEditor'
 import SaveToStorageModal from '@/components/shared/SaveToStorageModal'
+import ExportMenu from '@/components/shared/ExportMenu'
+import { downloadTextFile, slugifyFilename } from '@/lib/download'
 import LinkPicker from '@/components/shared/LinkPicker'
 import MentionMarkdown from '@/components/shared/MentionMarkdown'
 import Backlinks from '@/components/shared/Backlinks'
@@ -98,10 +100,9 @@ export default function NoteEditor() {
           setActiveNote(id)
           setMobileView('editor')
         }}
-        onCreate={async () => {
+        onCreate={() => {
           if (!activeProjectId) return
-          await createNote(activeProjectId)
-          setMobileView('editor')
+          useUIStore.getState().openNewItem('notes')
         }}
         createLabel="New Note"
         disabled={!activeProjectId}
@@ -119,6 +120,12 @@ export default function NoteEditor() {
       variant: 'danger',
     })
     if (ok) await deleteNote(note.id)
+  }
+
+  const handleDownload = (ext: 'md' | 'txt') => {
+    const base = slugifyFilename(title || 'untitled-note')
+    const mime = ext === 'md' ? 'text/markdown' : 'text/plain'
+    downloadTextFile(`${base}.${ext}`, content, mime)
   }
 
   const insertMention = (m: Mention) => {
@@ -164,6 +171,13 @@ export default function NoteEditor() {
                   {note.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
                 <div className="border-t border-gray-100 dark:border-zinc-800" />
+                <button onClick={() => { handleDownload('md'); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  <Download className="h-4 w-4 shrink-0 text-gray-400" /> Download as .md
+                </button>
+                <button onClick={() => { handleDownload('txt'); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  <Download className="h-4 w-4 shrink-0 text-gray-400" /> Download as .txt
+                </button>
+                <div className="border-t border-gray-100 dark:border-zinc-800" />
                 <button onClick={() => { handleDelete(); setShowKebab(false) }} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">
                   <Trash2 className="h-4 w-4 shrink-0" /> Delete note
                 </button>
@@ -190,6 +204,7 @@ export default function NoteEditor() {
             <button onClick={() => togglePin(note.id)} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-zinc-800" aria-label="Pin note">
               <Star className={clsx('h-4 w-4', note.is_pinned && 'fill-brand-500 text-brand-500')} />
             </button>
+            <ExportMenu filename={title || 'untitled-note'} content={content} />
             <button onClick={handleDelete} className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10" aria-label="Delete note">
               <Trash2 className="h-4 w-4" />
             </button>
@@ -220,6 +235,7 @@ export default function NoteEditor() {
               visibleDragbar={false}
               preview="edit"
               hideToolbar={false}
+              extraCommands={[]}
               textareaProps={{
                 placeholder: 'Start writing...',
                 onSelect: (e) => {

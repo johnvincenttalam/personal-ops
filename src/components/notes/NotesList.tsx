@@ -28,6 +28,7 @@ export default function NotesList() {
   const duplicateNote = useNoteStore((s) => s.duplicateNote)
   const moveNote = useNoteStore((s) => s.moveNote)
   const setMobileView = useUIStore((s) => s.setMobileView)
+  const openNewItem = useUIStore((s) => s.openNewItem)
 
   const [tab, setTab] = useState<'all' | 'pinned'>('all')
   const [movingId, setMovingId] = useState<string | null>(null)
@@ -94,10 +95,9 @@ export default function NotesList() {
     await moveNote(noteId, targetProjectId)
   }
 
-  const handleNew = async () => {
+  const handleNew = () => {
     if (!activeProjectId) return
-    await createNote(activeProjectId)
-    setMobileView('editor')
+    openNewItem('notes')
   }
 
   const handlePickTemplate = async (id: string) => {

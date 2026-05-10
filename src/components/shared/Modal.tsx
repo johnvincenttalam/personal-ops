@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
 interface Props {
@@ -16,8 +17,8 @@ export default function Modal({ title, onClose, children, footer, maxWidth = 'ma
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-4">
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[2px] dark:bg-black/60"
         onClick={onClose}
@@ -49,6 +50,7 @@ export default function Modal({ title, onClose, children, footer, maxWidth = 'ma
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

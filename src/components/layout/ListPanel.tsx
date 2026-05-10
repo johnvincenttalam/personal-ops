@@ -1,10 +1,6 @@
 import { Menu, FileText, Sparkles, CheckSquare, Archive, Plus } from 'lucide-react'
 import { useUIStore } from '@/stores/useUIStore'
 import { useProjectStore } from '@/stores/useProjectStore'
-import { useNoteStore } from '@/stores/useNoteStore'
-import { usePromptStore } from '@/stores/usePromptStore'
-import { useChecklistStore } from '@/stores/useChecklistStore'
-import { useStorageStore } from '@/stores/useStorageStore'
 import NotesList from '@/components/notes/NotesList'
 import PromptsList from '@/components/prompts/PromptsList'
 import ChecklistsList from '@/components/checklists/ChecklistsList'
@@ -28,32 +24,20 @@ const TAB_LABELS: Record<Tab, string> = {
 export default function ListPanel() {
   const activeTab = useUIStore((s) => s.activeTab)
   const setMobileView = useUIStore((s) => s.setMobileView)
+  const openNewItem = useUIStore((s) => s.openNewItem)
   const activeProject = useProjectStore((s) =>
     s.projects.find((p) => p.id === s.activeProjectId) ?? null
   )
   const activeProjectId = useProjectStore((s) => s.activeProjectId)
-  const createNote = useNoteStore((s) => s.createNote)
-  const createPrompt = usePromptStore((s) => s.createPrompt)
-  const createList = useChecklistStore((s) => s.createList)
-  const createStorage = useStorageStore((s) => s.createItem)
 
   const TabIcon = TAB_ICONS[activeTab]
-
-  const handleFab = async () => {
-    if (!activeProjectId) return
-    if (activeTab === 'notes') await createNote(activeProjectId)
-    else if (activeTab === 'prompts') await createPrompt(activeProjectId)
-    else if (activeTab === 'checklists') await createList(activeProjectId)
-    else await createStorage(activeProjectId)
-    setMobileView('editor')
-  }
 
   return (
     <section className="flex w-full flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       {/* Mobile FAB */}
       {activeProjectId && (
         <button
-          onClick={handleFab}
+          onClick={() => openNewItem(activeTab)}
           aria-label="New item"
           className="fixed bottom-[72px] right-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-brand-500 text-white shadow-lg transition hover:bg-brand-600 active:scale-95 md:hidden"
         >
